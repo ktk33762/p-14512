@@ -1,7 +1,7 @@
-package com.back.domain.service;
+package com.back.domain.post.service;
 
-import com.back.domain.entity.Post;
-import com.back.domain.repository.PostRepository;
+import com.back.domain.post.entity.Post;
+import com.back.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

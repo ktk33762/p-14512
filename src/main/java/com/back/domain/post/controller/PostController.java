@@ -1,7 +1,7 @@
-package com.back.domain.controller;
+package com.back.domain.post.controller;
 
-import com.back.domain.entity.Post;
-import com.back.domain.service.PostService;
+import com.back.domain.post.entity.Post;
+import com.back.domain.post.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
