@@ -12,13 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.stream.Collectors;
 
 @RequestMapping("/posts")
 @RequiredArgsConstructor
@@ -43,7 +40,7 @@ public class PostController {
         String content;
     }
 
-    @PostMapping("/doWrite")
+    @PostMapping("/write")
     @Transactional
     public String write(
             @ModelAttribute("form") @Valid WriteForm form,
@@ -51,15 +48,6 @@ public class PostController {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult
-                    .getFieldErrors()
-                    .stream()
-                    .map(FieldError::getDefaultMessage)
-                    .collect(Collectors.joining("\n"));
-
-            model.addAttribute("errorMessage", errorMessage);
-            model.addAttribute("form", form);
-
             return "post/post/write";
         }
 

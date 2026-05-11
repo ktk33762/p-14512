@@ -1,9 +1,14 @@
 <div style="color:red;" th:utext="${errorMessage}"></div>
 
-<form method="POST">
-    <input type="text" name="title" placeholder="제목" th:value="${form.title}" autofocus>
+<form method="POST" th:object="${form}">
+    <ul th:if="${#fields.hasAnyErrors()}">
+        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red"></li>
+    </ul>
+    <input type="text" th:field="*{title}" placeholder="제목" autofocus>
+<!--    <input type="text" name="title" placeholder="제목" th:value="${form.title}" autofocus>-->
     <br>
-    <textarea name="content" placeholder="내용" th:text="${form.content}"></textarea>
+<!--    <textarea name="content" placeholder="내용" th:text="${form.content}"></textarea>-->
+    <textarea name="content" placeholder="내용" th:field="*{content}"></textarea>
     <br>
     <input type="submit" value="작성">
 </form>
