@@ -12,10 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/posts")
 @RequiredArgsConstructor
@@ -54,6 +53,24 @@ public class PostController {
         Post post = postService.write(form.getTitle(), form.getContent());
 
         model.addAttribute("post", post);
+
+        return "redirect:/posts/detail/" + post.getId();
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable Integer id, Model model) {
+        Post post = postService.findById(id);
+        model.addAttribute("post", post);
+
+        return "post/post/detail";
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/list")
+    public String list(Model model) {
+        List<Post> posts = postService.findAll();
+        model.addAttribute("posts", posts);
 
         return "post/post/list";
     }
