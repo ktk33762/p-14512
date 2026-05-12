@@ -1,9 +1,7 @@
 <div style="color:red;" th:utext="${errorMessage}"></div>
 
 <form th:action="@{/posts/write}" method="POST" th:object="${form}">
-    <ul th:if="${#fields.hasAnyErrors()}">
-        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red"></li>
-    </ul>
+    <div th:replace="~{/common/fragment/errors :: errosFragment}"></div>
     <input type="text" th:field="*{title}" placeholder="제목" autofocus>
 <!--    <input type="text" name="title" placeholder="제목" th:value="${form.title}" autofocus>-->
     <br>

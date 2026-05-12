@@ -1,6 +1,7 @@
 package com.back.domain.member.entity;
 
 import com.back.global.baseEntity.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 public class Member extends BaseEntity {
+    @Column(unique = true)
     private String username;
+
     private String password;
+
+    @Column(unique = true)
     private String email;
 
     public Member(String username, String password, String email) {
