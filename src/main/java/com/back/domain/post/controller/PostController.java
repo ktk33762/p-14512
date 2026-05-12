@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -34,6 +36,19 @@ public class PostController {
     @AllArgsConstructor
     @Getter
     public static class WriteForm {
+        @NotBlank(message = "제목을 입력해주세요.")
+        @Size(min = 2, max = 20, message = "제목은 2 ~ 10 자 이내로 입력해주세요.")
+        String title;
+
+        @NotBlank(message = "내용을 입력해주세요.")
+        @Size(min = 2, max = 100, message = "내용은 2 ~ 100 자 이내로 입력해주세요.")
+        String content;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class ModifyForm {
         @NotBlank(message = "제목을 입력해주세요.")
         @Size(min = 2, max = 20, message = "제목은 2 ~ 10 자 이내로 입력해주세요.")
         String title;
@@ -92,5 +107,30 @@ public class PostController {
         postService.delete(post);
 
         return "redirect:/posts/list";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String showModify(@PathVariable Integer id, ModifyForm modifyForm, Model model) {
+        Post post = postService.findById(id);
+
+        modifyForm.setTitle(post.getTitle());
+        modifyForm.setContent(post.getContent());
+
+        model.addAttribute("id", id);
+
+        return "post/post/modify";
+    }
+
+    @Transactional
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String modify(@PathVariable Integer id, ModifyForm modifyForm){
+        Post post = postService.findById(id);
+
+        postService.modify(post, modifyForm.getTitle(), modifyForm.getContent());
+
+        return "redirect:/posts/detail/" + id;
+
     }
 }
