@@ -57,6 +57,8 @@ public class PostController {
         return "redirect:/posts/detail/" + post.getId();
     }
 
+
+
     @Transactional(readOnly = true)
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable Integer id, Model model) {

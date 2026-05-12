@@ -7,9 +7,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,11 +30,10 @@ public class MemberController {
         return "member/member/register";
     }
 
-
-    @NoArgsConstructor
+    @ToString
     @Getter
     @Setter
-    public static class RegisterForm {
+    public static class RegisterForm{
         @Size(min=3, max= 25)
         @NotBlank(message = "유저 ID는 필수 항목입니다.")
         private String username;
@@ -51,11 +50,12 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public String regist(@Valid RegisterForm registerForm, BindingResult bindingResult) {
+    public String register(@Valid RegisterForm registerForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "member/member/register";
         }
 
+        // 비밀번호 불일치 문제
         if (!registerForm.getPassword().equals(registerForm.getPassword_conform())) {
             bindingResult.rejectValue("password_conform", "passwordMissMatch", "패스워드가 일치하지 않습니다.");
 
@@ -63,6 +63,7 @@ public class MemberController {
         }
 
         Optional<Member> opMember = memberService.findByUsername(registerForm.getUsername());
+
 
         try {
             memberService.create(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail());
